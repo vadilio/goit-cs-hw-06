@@ -1,0 +1,29 @@
+version: "3.8"
+services:
+  app:
+    build: .
+    container_name: simple_web_app
+    ports:
+      - "3000:3000" # HTTP
+      - "5001:5001" # Socket server (TCP)
+    depends_on:
+      - mongo
+    environment:
+      - HTTP_PORT=3000
+      - SOCKET_PORT=5001
+      - MONGO_HOST=mongo
+      - MONGO_PORT=27017
+      - MONGO_DB=messages_db
+      - MONGO_COLLECTION=messages
+    volumes:
+      - ./:/app
+  mongo:
+    image: mongo:6.0
+    container_name: simple_mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
